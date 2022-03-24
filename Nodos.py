@@ -24,7 +24,8 @@ class Nuevo_Nodo:
             self.ultimo.siguiente = nuevoNodo
             self.ultimo = nuevoNodo
 
-
+    def devolver(self):
+        return self.raiz
 
     def imprimir(self):
         aux = self.raiz
@@ -33,5 +34,24 @@ class Nuevo_Nodo:
             print(aux.nombre, aux.fila, aux.columna, aux.filatexto)
             
             aux = aux.siguiente
+
+    def buscar(self, nombre):
+        aux = self.raiz
+        while aux != None:
+            if aux.nombre == nombre:
+                return True
+            aux = aux.siguiente
+        return False
+
+    def editar(self, nombre, fila, columna, filatexto):
+        aux = self.raiz
+        while aux != None:
+            if aux.nombre == nombre:
+                aux.fila = fila
+                aux.columna = columna
+                aux.filatexto = filatexto
+                return True
+            aux = aux.siguiente
+        return False
 
 

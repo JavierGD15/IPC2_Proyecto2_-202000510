@@ -29,3 +29,21 @@ class Nuevo_nodo_dron:
             print(aux.nombre, aux.tipo, aux.capacidad)
 
             aux = aux.siguiente
+
+    def buscar(self, nombre):
+        aux = self.raiz
+        while aux != None:
+            if aux.nombre == nombre:
+                return True
+            aux = aux.siguiente
+        return False
+
+    def editar(self, nombre, tipo, capacidad):
+        aux = self.raiz
+        while aux != None:
+            if aux.nombre == nombre:
+                aux.tipo = tipo
+                aux.capacidad = capacidad                
+                return True
+            aux = aux.siguiente
+        return False
