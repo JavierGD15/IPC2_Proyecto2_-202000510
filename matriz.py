@@ -1,5 +1,3 @@
-x = 1
-y = 1
 
 class Matriz_nodo:
     def __init__(self, x = None, y = None, izquierda = None, derecha = None, arriba = None, abajo = None, color = None):
@@ -16,37 +14,38 @@ class Nuevo_mapa:
         self.raiz = Matriz_nodo()
         self.ultimo = Matriz_nodo()
     
+
+    #Funciones de llenado de matriz
+
     def insertar(self, nuevoNodo,filas,columnas):
         global x,y
+        
         if self.raiz.x == None:
+            
             self.raiz = nuevoNodo
             self.ultimo = nuevoNodo
-            x = x+1
-        
-        elif x > columnas:
-            print(nuevoNodo.x, nuevoNodo.y)
-            self.raiz.abajo = nuevoNodo  
-            aux = self.raiz.abajo
-            aux.derecha = self.ultimo
-            x = 1
+
 
         elif self.raiz.derecha == None:
+            
             self.raiz.derecha = nuevoNodo
             self.ultimo = nuevoNodo
-            x = x+1
         else:
+            
             self.ultimo.derecha = nuevoNodo
             self.ultimo = nuevoNodo
-            x = x+1
+        
+
     
     def imprimir(self):
-        aux = self.raiz
-        while aux.abajo != None:
-            while aux != None:
-                print(aux.x, aux.y, aux.izquierda, aux.derecha, aux.arriba, aux.abajo, aux.color)
-                aux = aux.derecha
+        try:
+            aux = self.raiz
             
-            aux = self.raiz.abajo
+            while aux != None:
+                print("Nodo",aux.x, aux.y,"Derecha" ,aux.derecha.x, aux.derecha.y,"Izquierda",aux.izquierda.x, aux.izquierda.y,"Abajo",aux.abajo.x, aux.abajo.y,"Arriba",aux.arriba.x, aux.arriba.y)
+                aux = aux.derecha
+        except:
+            print("No hay nodos")
 
     def llenar_matriz(self, filas, columnas):
         Nuevo_mapa()
@@ -55,38 +54,66 @@ class Nuevo_mapa:
                 ejecutar.insertar(Matriz_nodo(i,j),filas,columnas)
 
     def buscar(self, x1,y1):
-        aux = self.raiz
-        try:
-            while aux != None:
-                if aux.x == x1 and aux.y == y1:
-                    return aux
-                elif aux.derecha == None:
-                    aux = aux.abajo
-                else:
-                    aux = aux.derecha
-            return None
-        except:
-            return None
-
+        aux3 = self.raiz
+        while aux3 != None:
+            if aux3.x == x1 and aux3.y == y1:
+                return aux3
+            aux3 = aux3.derecha
+    
+    def borrar_derecha(self, filas, columnas):
+        for i in range(1,filas+1):
+            
+            aux = ejecutar.buscar(i,columnas)
+            if aux== None:
+                break
+            else:
+                aux.derecha = None       
+           
     
     def unir_nodos(self,filas, columnas):
         Nuevo_mapa()
-        
         for i in range(1,filas+1):
             for j in range(1,columnas+1):
-                print(i,j)
+                
                 aux = ejecutar.buscar(i,j)
-                print(aux)
-                aux.izquierda = ejecutar.buscar(i,j-1)
-                aux.derecha = ejecutar.buscar(i,j+1)
-                aux.abajo = ejecutar.buscar(i+1,j)
-                aux.arriba = ejecutar.buscar(i-1,j)
+                
+                if j-1 >= 0:
+                    aux.izquierda = ejecutar.buscar(i,j-1)
+               
+                if i+1 <= filas:                    
+                    aux.abajo = ejecutar.buscar(i+1,j)   
+                    
+                    
+                if i-1 >= 1:
+                    aux.arriba = ejecutar.buscar(i-1,j)
+                
+
+    #funciones de tablero
+
+    def buscar_coordenadas(self,x2,y2):
+        aux = self.raiz
+
+        for j in range(1,y2):
+            print(j)
+            aux = aux.derecha
+        for i in range(1,x2):
+            aux = aux.abajo
+        return aux
+
+    def editar_coordenadas(self,x2,y2,color):
+        aux = self.buscar_coordenadas(x2,y2)
+        aux.color = color
+
+
 
 ejecutar = Nuevo_mapa()
 ejecutar.llenar_matriz(5,5)
-ejecutar.imprimir()
+
 ejecutar.unir_nodos(5,5)
-ejecutar.imprimir()
+
+ejecutar.borrar_derecha(5,5)
+
+print("Resultado",ejecutar.buscar_coordenadas(5,1).x,ejecutar.buscar_coordenadas(5,5).y)
 
                 
 
