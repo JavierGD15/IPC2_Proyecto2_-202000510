@@ -25,13 +25,14 @@ class Nuevo_Nodo:
             self.ultimo = nuevoNodo
 
     def devolver(self):
-        return self.raiz
+        aux = self.raiz
+        return aux
 
     def imprimir(self):
         aux = self.raiz
         
         while aux != None:
-            print(aux.nombre, aux.fila, aux.columna, aux.filatexto)
+            print(aux.nombre)
             
             aux = aux.siguiente
 
@@ -40,6 +41,14 @@ class Nuevo_Nodo:
         while aux != None:
             if aux.nombre == nombre:
                 return True
+            aux = aux.siguiente
+        return False
+    
+    def mostrar(self, nombre):
+        aux = self.raiz
+        while aux != None:
+            if aux.nombre == nombre:
+                return aux
             aux = aux.siguiente
         return False
 

@@ -1,3 +1,8 @@
+from graphviz import Digraph, Graph
+import collections
+import re
+from turtle import pen
+
 
 class Matriz_nodo:
     def __init__(self, x = None, y = None, izquierda = None, derecha = None, arriba = None, abajo = None, color = None):
@@ -16,8 +21,12 @@ class Nuevo_mapa:
     
 
     #Funciones de llenado de matriz
+    def reiniciaraiz(self):
 
-    def insertar(self, nuevoNodo,filas,columnas):
+        self.raiz = Matriz_nodo()
+        self.ultimo = Matriz_nodo()
+
+    def insertar(self, nuevoNodo):
         global x,y
         
         if self.raiz.x == None:
@@ -47,11 +56,11 @@ class Nuevo_mapa:
         except:
             print("No hay nodos")
 
-    def llenar_matriz(self, filas, columnas):
+    def llenar_matriz(self,filas, columnas):
         Nuevo_mapa()
         for i in range(1,filas+1):
             for j in range(1,columnas+1):
-                ejecutar.insertar(Matriz_nodo(i,j),filas,columnas)
+                self.insertar(Matriz_nodo(i,j))
 
     def buscar(self, x1,y1):
         aux3 = self.raiz
@@ -60,10 +69,10 @@ class Nuevo_mapa:
                 return aux3
             aux3 = aux3.derecha
     
-    def borrar_derecha(self, filas, columnas):
+    def borrar_derecha(self,filas, columnas):
         for i in range(1,filas+1):
             
-            aux = ejecutar.buscar(i,columnas)
+            aux = self.buscar(i,columnas)
             if aux== None:
                 break
             else:
@@ -71,51 +80,177 @@ class Nuevo_mapa:
            
     
     def unir_nodos(self,filas, columnas):
-        Nuevo_mapa()
+        
         for i in range(1,filas+1):
             for j in range(1,columnas+1):
                 
-                aux = ejecutar.buscar(i,j)
+                aux = self.buscar(i,j)
                 
                 if j-1 >= 0:
-                    aux.izquierda = ejecutar.buscar(i,j-1)
+                    aux.izquierda = self.buscar(i,j-1)
                
                 if i+1 <= filas:                    
-                    aux.abajo = ejecutar.buscar(i+1,j)   
+                    aux.abajo = self.buscar(i+1,j)   
                     
                     
                 if i-1 >= 1:
-                    aux.arriba = ejecutar.buscar(i-1,j)
+                    aux.arriba = self.buscar(i-1,j)
                 
 
     #funciones de tablero
 
     def buscar_coordenadas(self,x2,y2):
         aux = self.raiz
+        
 
         for j in range(1,y2):
-            print(j)
+            
             aux = aux.derecha
         for i in range(1,x2):
             aux = aux.abajo
         return aux
 
-    def editar_coordenadas(self,x2,y2,color):
-        aux = self.buscar_coordenadas(x2,y2)
+    def editar_coordenadas(self,fila,columna,color):        
+        aux = self.buscar_coordenadas(fila,columna)
         aux.color = color
+    
+    def llenar_colores(self,cadena,fila1,columna1):
+        
+        columna = 1
+        fila = 1
+        for i in cadena:
+            
+            try:            
+                if i != "\n":
+                    if columna == columna1:                          
+                        
+                        if i == "*":       
+                                    
+                            self.editar_coordenadas(int(fila),int(columna),"negro")
+                            fila = fila+1
+                            columna = 1
+
+                        elif i == "E":
+                            
+                            self.editar_coordenadas(int(fila),int(columna),"verde") 
+                            fila = fila+1
+                            columna = 1
+                        elif i == '"':
+                            continue
+
+                        elif i == "C":
+                            
+                            self.editar_coordenadas(int(fila),int(columna),"azul") 
+                            fila = fila+1
+                            columna = 1
+                        elif i == "R":
+                            
+                            self.editar_coordenadas(int(fila),int(columna),"gris")
+                            fila = fila+1
+                            columna = 1
+                        else:                        
+                            self.editar_coordenadas(int(fila),int(columna),"blanco")
+                            fila = fila+1
+                            columna = 1
+                    elif fila > fila1:
+                        break
+                    elif i == "*":       
+                                
+                        self.editar_coordenadas(int(fila),int(columna),"negro")
+                        columna = columna+1
+
+                    elif i == "E":
+                        
+                        self.editar_coordenadas(int(fila),int(columna),"verde") 
+                        columna = columna+1
+
+                    elif i == "C":
+                        
+                        self.editar_coordenadas(int(fila),int(columna),"azul") 
+                        columna = columna+1
+                    elif i == "R":
+                        
+                        self.editar_coordenadas(int(fila),int(columna),"gris")
+                        columna = columna+1
+                    else:
+                        
+                        self.editar_coordenadas(int(fila),int(columna),"blanco")
+                        columna = columna+1
+                
+                else:
+                    
+                    fila = fila+1
+                    columna = 1
+            except:
+                print("Error", fila, columna)
+                break
 
 
+    def imprimir_total(self,filas, columnas):
+                
+        x = ""
+        tr_inicio = '''<TR>'''
+        tr_fin = '''</TR>'''
+        cuerpo = ""
 
-ejecutar = Nuevo_mapa()
-ejecutar.llenar_matriz(5,5)
 
-ejecutar.unir_nodos(5,5)
+        dot = Digraph(filename='Mapa', format= 'png')
 
-ejecutar.borrar_derecha(5,5)
+        for k in range(1,filas+1):
+            for j in range(1,columnas+1):
+                i = self.buscar_coordenadas(k,j).color                
+                try:
+                    if i == "negro":
+                        x = x+'''<TD BGCOLOR="black"><FONT> </FONT></TD>'''
 
-print("Resultado",ejecutar.buscar_coordenadas(5,1).x,ejecutar.buscar_coordenadas(5,5).y)
+
+                    elif i == "verde":
+                        x = x+'''<TD BGCOLOR="green"><FONT> </FONT></TD>'''
+
+                    
+                    elif i == "azul":
+                        x = x+'''<TD BGCOLOR="blue"><FONT> </FONT></TD>'''
+
+
+                    elif i == "gris":
+                        x = x+'''<TD BGCOLOR="gray"><FONT> </FONT></TD>'''
+       
+                    elif i == "rojo":
+                        x = x+'''<TD BGCOLOR="red"><FONT> </FONT></TD>'''
+
+                    else:
+                        x = x+'''<TD BGCOLOR="white"><FONT> </FONT></TD>'''
+
+                except:
+                    print("Error", i)
+                    break
+            cuerpo = cuerpo +tr_inicio+x+tr_fin  
+            x = ""          
+
+        dot.node('tab',shape='plaintext', label='''<<TABLE CELLSPACING="0">
+                
+                '''+cuerpo+'''
+
+        </TABLE>>''')
+
+                #generar salto de linea
 
                 
+        dot.view()
+    
+
+
+# self = Nuevo_mapa()
+# self.llenar_matriz(int(15),int(20))
+
+# self.unir_nodos(15,20)
+
+# self.borrar_derecha(15,20)
+# texto = "********************""*** **             *""*** *****E*****C****""*** ***** ***** ***R""E                   ""*** ** ** ** ** ****""*** ** ** ** ** **R*""*                  *""*** ** ** ** ** ****""*** ** ** ** ** ****""***                *""*** ** ** ** ** ****""*** **  E ** *R ****""*** *****         C*""*** *****C***** ****"
+
+# self.llenar_colores(texto,15,20)
+# self.imprimir_total(15,20)
+
 
 
 
