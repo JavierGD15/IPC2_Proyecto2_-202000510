@@ -129,6 +129,7 @@ class Nuevo_mapa:
                             self.editar_coordenadas(int(fila),int(columna),"negro")
                             fila = fila+1
                             columna = 1
+                        
 
                         elif i == "E":
                             
@@ -158,6 +159,9 @@ class Nuevo_mapa:
                                 
                         self.editar_coordenadas(int(fila),int(columna),"negro")
                         columna = columna+1
+                    
+                    elif i == '"':
+                            continue
 
                     elif i == "E":
                         
@@ -189,6 +193,7 @@ class Nuevo_mapa:
     def imprimir_total(self,filas, columnas):
                 
         x = ""
+        y = ""
         tr_inicio = '''<TR>'''
         tr_fin = '''</TR>'''
         cuerpo = ""
@@ -196,8 +201,14 @@ class Nuevo_mapa:
 
         dot = Digraph(filename='Mapa', format= 'png')
 
+        for i in range(0,columnas+1):
+            y = y + '''<TD BGCOLOR="white"><FONT>'''+str(i)+'''</FONT></TD>'''
+
+        cuerpo = cuerpo +tr_inicio+y+tr_fin
         for k in range(1,filas+1):
+            x = x + '''<TD BGCOLOR="white"><FONT>'''+str(k)+'''</FONT></TD>'''
             for j in range(1,columnas+1):
+                
                 i = self.buscar_coordenadas(k,j).color                
                 try:
                     if i == "negro":
@@ -238,7 +249,33 @@ class Nuevo_mapa:
                 
         dot.view()
     
+    def buscar_color(self,filas,columnas,color):
+        z = 0
+        for i in range(1,filas+1):
+            for j in range(1,columnas+1):
+                
+                aux = self.buscar(i,j)
+                
+                if aux.color == color:
+                    z = z+1
+                    
+        return z
 
+    def buscar_color_coordenada(self,filas,columnas,color):
+        
+        for i in range(1,filas+1):
+            for j in range(1,columnas+1):
+                
+                aux = self.buscar(i,j)
+                
+                if aux.color == color:                    
+                    return aux
+                    
+    def realizar_mision(self,filacivil,columnacivil, filaentrada, columnarentrada):    
+        aux = self.buscar_coordenadas(filacivil,columnacivil)
+        print(aux.color)
+        aux = self.buscar_coordenadas(filaentrada, columnarentrada)
+        print(aux.color)
 
 # self = Nuevo_mapa()
 # self.llenar_matriz(int(15),int(20))
@@ -246,7 +283,7 @@ class Nuevo_mapa:
 # self.unir_nodos(15,20)
 
 # self.borrar_derecha(15,20)
-# texto = "********************""*** **             *""*** *****E*****C****""*** ***** ***** ***R""E                   ""*** ** ** ** ** ****""*** ** ** ** ** **R*""*                  *""*** ** ** ** ** ****""*** ** ** ** ** ****""***                *""*** ** ** ** ** ****""*** **  E ** *R ****""*** *****         C*""*** *****C***** ****"
+# texto = "********************""*** **             *""*** *****E*****C****""*** ***** ***** ***R""E             A   AA""*** ** ** ** ** ****""*** ** ** ** ** **R*""*              A   *""*** ** ** ** ** ****""*** ** ** ** ** ****""***   A        A   *""*** ** ** ** ** ****""*** **  E ** *R ****""*** *****A        C*""*** *****C***** ****"
 
 # self.llenar_colores(texto,15,20)
 # self.imprimir_total(15,20)

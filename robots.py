@@ -34,7 +34,7 @@ class Nuevo_nodo_dron:
         aux = self.raiz
         while aux != None:
             if aux.nombre == nombre:
-                return True
+                return aux
             aux = aux.siguiente
         return False
 
@@ -47,3 +47,8 @@ class Nuevo_nodo_dron:
                 return True
             aux = aux.siguiente
         return False
+    def verificar(self):
+            if self.raiz != None:
+                return True
+            else:
+                return False

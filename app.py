@@ -116,32 +116,20 @@ def menu():
     print("***************************************************")
     opcion = input("Ingrese su opcion: ")
     if opcion == "1":
-        print("entro")
+        opcion = input("Ingrese R si desea elaborar un rescate o E si desea una extracción de recursos: ")
+        if opcion == "R":
+            mision_rescate()
+        elif opcion == "E":
+            mision_extraccion()
+        else:
+            print("Opcion no valida")
+            menu()
     elif opcion == "2":
         print("Las ciudades disponibles son: ")
         nuevalista.imprimir()
         opcion = input("Ingrese el nombre de la ciudad que desea visualizar: ")
-
-        aux = nuevalista.mostrar(opcion)
-        if aux != False:
-            matriz = Nuevo_mapa()
-            matriz.reiniciaraiz()
-            matriz.llenar_matriz(int(aux.fila),int(aux.columna))
-            matriz.unir_nodos(int(aux.fila),int(aux.columna))
-            matriz.borrar_derecha(int(aux.fila),int(aux.columna))
-            matriz.llenar_colores(aux.filatexto,int(aux.fila),int(aux.columna))
-            
-            ayuda = Nuevo_guerrero.devolver()
-            
-            while ayuda != None:
-                if ayuda.nombre == opcion:
-                    matriz.editar_coordenadas(int(ayuda.fila),int(ayuda.columna),"rojo")
-                    ayuda = ayuda.siguiente
-                else:
-                    ayuda = ayuda.siguiente
-            
-            matriz.imprimir_total(int(aux.fila),int(aux.columna))         
-                        
+        llenado_lista(opcion)
+                    
 
         menu()
     elif opcion == "3":    
@@ -154,6 +142,91 @@ def menu():
         print("Opcion no valida")
         menu()
 
+def mision_rescate():
+    global nuevalista, nuevodron,Nuevo_guerrero,matriz
+    print("***************************************************")
+    print("*"+"           Verificando existencia de ChapinRescue..."+ "                *")
+    op = nuevodron.verificar()
+    if op == True:
+        print("Los drones disponibles son: ")
+        nuevodron.imprimir()
+        opcion = input("Ingrese el nombre del drone que desea utilizar: ")
+        aux = nuevodron.buscar(opcion)
+        if aux != False:
+            print("Las ciudades disponibles son: ")
+            nuevalista.imprimir()
+            opcion = input("Ingrese el nombre de la ciudad que desea rescatar: ")
+            aux56 = nuevalista.mostrar(opcion)
+            llenado_lista(opcion)
+            print("La ciudad seleccionada es la siguiente: ")
+            entradas =matriz.buscar_color("azul")
+            if len(entradas) > 0:
+                print("Si hay unidades civiles en la ciudad seleccionada, se rescataran")
+                if len(entradas) > 1:
+                    civilesX = input("Ingrese la coordenada X de la unidad civil a rescatar: ")
+                    civilesY = input("Ingrese la coordenada Y de la unidad civil a rescatar: ")
+                    entradas =matriz.buscar_color(aux56.fila,aux56.columna,"verde")
+                    if len(entradas) > 1:
+                        coordenadaX = input("Ingrese la coordenadas en X de su punto de entrada: ")
+                        coordenadaY = input("Ingrese la coordenadas en Y de su punto de entrada: ")
+                        matriz.realizar_mision(civilesX,civilesY,coordenadaX,coordenadaY)
+                    else:
+                        coordenadamatriz = matriz.buscar_color_coordenada(aux56.fila,aux56.columna,"verde")
+                        matriz.realizar_mision(civilesX,civilesY,coordenadamatriz.x,coordenadamatriz.y)
+                
+                else:
+                    civilesX1 = matriz.buscar_color_coordenada(aux56.fila,aux56.columna,"azul")                    
+                    if len(entradas) > 1:
+                        coordenadaX = input("Ingrese la coordenadas en X de su punto de entrada: ")
+                        coordenadaY = input("Ingrese la coordenadas en Y de su punto de entrada: ")
+                        matriz.realizar_mision(civilesX1.x,civilesX1.y,coordenadaX,coordenadaY)
+                    else:
+                        coordenadamatriz = matriz.buscar_color_coordenada(aux56.fila,aux56.columna,"verde")
+                        matriz.realizar_mision(civilesX1.x,civilesX1.y,coordenadamatriz.x,coordenadamatriz.y)
+                        
+                    
+                    
+                
+            else:
+                print("No hay unidades civiles en la ciudad seleccionada")
+                menu()
+
+
+        else:
+            print("No existe este dron")
+            menu()
+    else:
+        print("No existen drones disponibles")
+        menu()
+
+
+def mision_extraccion():
+    print("***************************************************")
+
+def llenado_lista(opcion):
+    global nuevalista, nuevodron,Nuevo_guerrero,matriz
+    aux = nuevalista.mostrar(opcion)
+    if aux != False:
+            matriz = Nuevo_mapa()
+            matriz.reiniciaraiz()
+            matriz.llenar_matriz(int(aux.fila),int(aux.columna))
+            matriz.unir_nodos(int(aux.fila),int(aux.columna))
+            matriz.borrar_derecha(int(aux.fila),int(aux.columna))
+            matriz.llenar_colores(aux.filatexto,int(aux.fila),int(aux.columna))
+            
+            
+            ayuda = Nuevo_guerrero.devolver()
+            
+            while ayuda != None:
+                if ayuda.nombre == opcion:
+                    matriz.editar_coordenadas(int(ayuda.fila),int(ayuda.columna),"rojo")
+                    ayuda = ayuda.siguiente
+                else:
+                    ayuda = ayuda.siguiente
+            matriz.imprimir_total(int(aux.fila),int(aux.columna)) 
+    else:
+        print("No existe esa ciudad")
+        menu()
 
 if __name__ == "__main__":
     ROOT = Tk()    
