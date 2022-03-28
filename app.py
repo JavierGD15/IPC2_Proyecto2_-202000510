@@ -11,6 +11,8 @@ from Nodos import Nodo, Nuevo_Nodo
 from robots import Nodo_dron, Nuevo_nodo_dron
 from matriz import Matriz_nodo, Nuevo_mapa
 from guerreros import Nodo_guerra, Nuevo_Nodo_guerra
+from Rescate import Nuevo_rescate
+from extraccion import Nueva_extraccion
 from imprimir_mapa import mapas
 
 
@@ -144,12 +146,13 @@ def menu():
 
 def mision_rescate():
     global nuevalista, nuevodron,Nuevo_guerrero,matriz
+    rescate = Nuevo_rescate()
     print("***************************************************")
     print("*"+"           Verificando existencia de ChapinRescue..."+ "                *")
     op = nuevodron.verificar()
     if op == True:
         print("Los drones disponibles son: ")
-        nuevodron.imprimir()
+        nuevodron.imprimir(False)
         opcion = input("Ingrese el nombre del drone que desea utilizar: ")
         aux = nuevodron.buscar(opcion)
         if aux != False:
@@ -157,32 +160,36 @@ def mision_rescate():
             nuevalista.imprimir()
             opcion = input("Ingrese el nombre de la ciudad que desea rescatar: ")
             aux56 = nuevalista.mostrar(opcion)
+            print(aux56.fila, aux56.columna)
             llenado_lista(opcion)
             print("La ciudad seleccionada es la siguiente: ")
-            entradas =matriz.buscar_color("azul")
-            if len(entradas) > 0:
+            entradas =matriz.buscar_color(int(aux56.fila),int(aux56.columna),"azul")
+            if entradas > 0:
                 print("Si hay unidades civiles en la ciudad seleccionada, se rescataran")
-                if len(entradas) > 1:
-                    civilesX = input("Ingrese la coordenada X de la unidad civil a rescatar: ")
-                    civilesY = input("Ingrese la coordenada Y de la unidad civil a rescatar: ")
-                    entradas =matriz.buscar_color(aux56.fila,aux56.columna,"verde")
-                    if len(entradas) > 1:
-                        coordenadaX = input("Ingrese la coordenadas en X de su punto de entrada: ")
-                        coordenadaY = input("Ingrese la coordenadas en Y de su punto de entrada: ")
-                        matriz.realizar_mision(civilesX,civilesY,coordenadaX,coordenadaY)
+                if entradas > 1:
+                    civilesX = input("Ingrese la coordenada Y de la unidad civil a rescatar: ")
+                    civilesY = input("Ingrese la coordenada X de la unidad civil a rescatar: ")
+                    entradas =matriz.buscar_color(int(aux56.fila),int(aux56.columna),"verde")
+                    if entradas > 1:
+                        coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
+                        coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
+                        mat = matriz.buscar_coordenadas(1,1)
+                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat) 
                     else:
-                        coordenadamatriz = matriz.buscar_color_coordenada(aux56.fila,aux56.columna,"verde")
-                        matriz.realizar_mision(civilesX,civilesY,coordenadamatriz.x,coordenadamatriz.y)
+                        mat = matriz.buscar_coordenadas(1,1)
+                        coordenadamatriz = matriz.buscar_color_coordenada(int(aux56.fila),int(aux56.columna),"verde")
+                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadamatriz.x),int(coordenadamatriz.y) , mat)
                 
                 else:
-                    civilesX1 = matriz.buscar_color_coordenada(aux56.fila,aux56.columna,"azul")                    
+                    mat = matriz.buscar_coordenadas(1,1)
+                    civilesX1 = matriz.buscar_color_coordenada(int(aux56.fila),int(aux56.columna),"azul")                    
                     if len(entradas) > 1:
-                        coordenadaX = input("Ingrese la coordenadas en X de su punto de entrada: ")
-                        coordenadaY = input("Ingrese la coordenadas en Y de su punto de entrada: ")
-                        matriz.realizar_mision(civilesX1.x,civilesX1.y,coordenadaX,coordenadaY)
+                        coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
+                        coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
+                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadaX),int(coordenadaY), mat)
                     else:
                         coordenadamatriz = matriz.buscar_color_coordenada(aux56.fila,aux56.columna,"verde")
-                        matriz.realizar_mision(civilesX1.x,civilesX1.y,coordenadamatriz.x,coordenadamatriz.y)
+                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadamatriz.x),int(coordenadamatriz.y), mat)
                         
                     
                     
@@ -198,11 +205,73 @@ def mision_rescate():
     else:
         print("No existen drones disponibles")
         menu()
-
+    menu()
 
 def mision_extraccion():
     print("***************************************************")
+    global nuevalista, nuevodron,Nuevo_guerrero,matriz
+    rescate = Nueva_extraccion()
+    print("***************************************************")
+    print("*"+"           Verificando existencia de ChapinFighter..."+ "                *")
+    op = nuevodron.verificar_tipo()
+    if op == True:
+        print("Los drones disponibles son: ")
+        nuevodron.imprimir(True)
+        opcion = input("Ingrese el nombre del drone que desea utilizar: ")
+        aux = nuevodron.buscar(opcion)
+        if aux != False:
+            print("Las ciudades disponibles son: ")
+            nuevalista.imprimir()
+            opcion = input("Ingrese el nombre de la ciudad que desea Recoger recursos: ")
+            aux56 = nuevalista.mostrar(opcion)
+            print(aux56.fila, aux56.columna)
+            llenado_lista(opcion)
+            print("La ciudad seleccionada es la siguiente: ")
+            entradas =matriz.buscar_color(int(aux56.fila),int(aux56.columna),"gris")
+            if entradas > 0:
+                print("Si hay Recursos en la ciudad seleccionada, se recogeran")
+                entradas =matriz.buscar_color(int(aux56.fila),int(aux56.columna),"gris")
+                if entradas > 1:
+                    civilesX = input("Ingrese la coordenada Y de la unidad de recursos: ")
+                    civilesY = input("Ingrese la coordenada X de la unidad de recursos: ")
+                    entradas =matriz.buscar_color(int(aux56.fila),int(aux56.columna),"verde")
+                    if entradas > 1:
+                        coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
+                        coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
+                        mat = matriz.buscar_coordenadas(1,1)
+                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat, int(aux.capacidad)) 
+                    else:
+                        mat = matriz.buscar_coordenadas(1,1)
+                        coordenadamatriz = matriz.buscar_color_coordenada(int(aux56.fila),int(aux56.columna),"verde")
+                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadamatriz.x),int(coordenadamatriz.y) , mat, int(aux.capacidad))
+                
+                else:
+                    mat = matriz.buscar_coordenadas(1,1)
+                    civilesX1 = matriz.buscar_color_coordenada(int(aux56.fila),int(aux56.columna),"gris")                    
+                    if len(entradas) > 1:
+                        coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
+                        coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
+                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadaX),int(coordenadaY), mat, int(aux.capacidad))
+                    else:
+                        coordenadamatriz = matriz.buscar_color_coordenada(aux56.fila,aux56.columna,"verde")
+                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadamatriz.x),int(coordenadamatriz.y), mat, int(aux.capacidad))
+                        
+                    
+                    
+                
+            else:
+                print("No hay unidades civiles en la ciudad seleccionada")
+                menu()
 
+
+        else:
+            print("No existe este dron")
+            menu()
+    else:
+        print("No existen drones disponibles")
+        menu()
+    menu()
+    
 def llenado_lista(opcion):
     global nuevalista, nuevodron,Nuevo_guerrero,matriz
     aux = nuevalista.mostrar(opcion)
@@ -219,7 +288,7 @@ def llenado_lista(opcion):
             
             while ayuda != None:
                 if ayuda.nombre == opcion:
-                    matriz.editar_coordenadas(int(ayuda.fila),int(ayuda.columna),"rojo")
+                    matriz.editar_coordenadas_robot(int(ayuda.fila),int(ayuda.columna),"rojo",int(ayuda.valor))
                     ayuda = ayuda.siguiente
                 else:
                     ayuda = ayuda.siguiente

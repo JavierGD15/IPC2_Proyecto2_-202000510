@@ -14,7 +14,7 @@ class Matriz_nodo:
         self.abajo = abajo
         self.color = color
 
-class Nuevo_mapa:
+class Nuevo_rescate:
     def __init__(self):
         self.raiz = Matriz_nodo()
         self.ultimo = Matriz_nodo()
@@ -57,7 +57,7 @@ class Nuevo_mapa:
             print("No hay nodos")
 
     def llenar_matriz(self,filas, columnas):
-        Nuevo_mapa()
+        
         for i in range(1,filas+1):
             for j in range(1,columnas+1):
                 self.insertar(Matriz_nodo(i,j))
@@ -290,7 +290,8 @@ class Nuevo_mapa:
                 if aux.color == color:                    
                     return aux
                     
-    def realizar_mision(self,filacivil,columnacivil, filaentrada, columnarentrada):    
+    def realizar_mision(self,filacivil,columnacivil, filaentrada, columnarentrada, matriz):  
+        self.raiz = matriz  
         civil = self.buscar_coordenadas(filacivil,columnacivil)        
         usuario = self.buscar_coordenadas(filaentrada, columnarentrada)
         print("Coordenadas civil: ", civil.x, civil.y)
@@ -530,14 +531,14 @@ class Nuevo_mapa:
 
 
 
-self = Nuevo_mapa()
-self.llenar_matriz(int(15),int(20))
-self.unir_nodos(15,20)
-self.borrar_derecha(15,20)
-texto = "********************""*** **             *""*** *****E*****C****""*** ***** ***** ***R""E             A   AA""*** ** ** ** ** ****""*** ** ** ** ** **R*""*              A   *""*** ** ** ** ** ****""*** ** ** ** ** ****""***   A      A     *""*** ** ** ** ** ****""*** **  E ** *R ****""*** *****A        C*""*** *****C***** ****"
+# self = Nuevo_rescate()
+# self.llenar_matriz(int(15),int(20))
+# self.unir_nodos(15,20)
+# self.borrar_derecha(15,20)
+# texto = "********************""*** **             *""*** *****E*****C****""*** ***** ***** ***R""E             A   AA""*** ** ** ** ** ****""*** ** ** ** ** **R*""*              A   *""*** ** ** ** ** ****""*** ** ** ** ** ****""***   A      A     *""*** ** ** ** ** ****""*** **  E ** *R ****""*** *****A        C*""*** *****C***** ****"
 
-self.llenar_colores(texto,15,20)
-#self.imprimir_total(15,20)
+# self.llenar_colores(texto,15,20)
+# #self.imprimir_total(15,20)
 
-self.realizar_mision(14,10,5,1)
+# self.realizar_mision(14,10,5,1)
 

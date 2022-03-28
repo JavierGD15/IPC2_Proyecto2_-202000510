@@ -22,13 +22,22 @@ class Nuevo_nodo_dron:
             self.ultimo.siguiente = nuevoNodo
             self.ultimo = nuevoNodo
 
-    def imprimir(self):
+    def imprimir(self, variable):
         aux = self.raiz
 
         while aux != None:
-            print(aux.nombre, aux.tipo, aux.capacidad)
+            if variable == True:
+                if aux.capacidad != None:
+                    print("Nombre:",aux.nombre," Tipo:",aux.tipo," Capacidad:",aux.capacidad)                
 
-            aux = aux.siguiente
+                    aux = aux.siguiente
+            else:
+                if aux.capacidad == None:
+                    print("Nombre:",aux.nombre," Tipo:",aux.tipo)  
+                    aux = aux.siguiente
+
+    
+
 
     def buscar(self, nombre):
         aux = self.raiz
@@ -48,7 +57,17 @@ class Nuevo_nodo_dron:
             aux = aux.siguiente
         return False
     def verificar(self):
-            if self.raiz != None:
+        aux = self.raiz
+        while aux != None:
+            if aux.capacidad == None and aux.nombre != None:
                 return True
-            else:
-                return False
+            aux = aux.siguiente
+        return False
+
+    def verificar_tipo(self):
+        aux = self.raiz
+        while aux != None:
+            if aux.capacidad != None:
+                return True
+            aux = aux.siguiente
+        return False

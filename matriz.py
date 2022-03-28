@@ -5,7 +5,7 @@ from turtle import pen
 
 
 class Matriz_nodo:
-    def __init__(self, x = None, y = None, izquierda = None, derecha = None, arriba = None, abajo = None, color = None):
+    def __init__(self, x = None, y = None, izquierda = None, derecha = None, arriba = None, abajo = None, color = None,capacidad = None):
         self.x = x
         self.y = y
         self.izquierda = izquierda
@@ -13,6 +13,7 @@ class Matriz_nodo:
         self.arriba = arriba
         self.abajo = abajo
         self.color = color
+        self.capacidad = capacidad
 
 class Nuevo_mapa:
     def __init__(self):
@@ -113,6 +114,14 @@ class Nuevo_mapa:
     def editar_coordenadas(self,fila,columna,color):        
         aux = self.buscar_coordenadas(fila,columna)
         aux.color = color
+    
+    def editar_coordenadas_robot(self,fila,columna,color,capacidad):        
+        aux = self.buscar_coordenadas(fila,columna)
+        if color == "rojo":
+            aux.color = color
+            aux.capacidad = capacidad
+        else:
+            aux.color = color
     
     def llenar_colores(self,cadena,fila1,columna1):
         
@@ -253,8 +262,7 @@ class Nuevo_mapa:
         z = 0
         for i in range(1,filas+1):
             for j in range(1,columnas+1):
-                
-                aux = self.buscar(i,j)
+                aux = self.buscar_coordenadas(i,j)
                 
                 if aux.color == color:
                     z = z+1
@@ -266,7 +274,7 @@ class Nuevo_mapa:
         for i in range(1,filas+1):
             for j in range(1,columnas+1):
                 
-                aux = self.buscar(i,j)
+                aux = self.buscar_coordenadas(i,j)
                 
                 if aux.color == color:                    
                     return aux
