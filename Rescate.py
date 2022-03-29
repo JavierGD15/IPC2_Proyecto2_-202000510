@@ -290,12 +290,15 @@ class Nuevo_rescate:
                 if aux.color == color:                    
                     return aux
                     
-    def realizar_mision(self,filacivil,columnacivil, filaentrada, columnarentrada, matriz):  
+    def realizar_mision(self,filacivil,columnacivil, filaentrada, columnarentrada, matriz,filas,columnas):  
+        global fila_final, columna_final
         self.raiz = matriz  
-        civil = self.buscar_coordenadas(filacivil,columnacivil)        
-        usuario = self.buscar_coordenadas(filaentrada, columnarentrada)
-        print("Coordenadas civil: ", civil.x, civil.y)
-        print("Coordenadas usuario: ", usuario.x, usuario.y)
+        fila_final = filas
+        columna_final = columnas
+        civil = self.buscar_coordenadas(filaentrada, columnarentrada)      
+        usuario = self.buscar_coordenadas(filacivil,columnacivil)  
+        print("Coordenadas civil: ", usuario.x, usuario.y)
+        print("Coordenadas usuario: ", civil.x, civil.y)
         #Comparamos ubicaciones
         if usuario.x > civil.x :
             if usuario.y > civil.y :
@@ -352,42 +355,65 @@ class Nuevo_rescate:
             return False
     
     def llegar_derecha(self,usuario,civil):
-        if usuario.derecha.x == civil.x and usuario.derecha.y == civil.y:
-            return True
-        else:
+        try:
+            if usuario.derecha.x == civil.x and usuario.derecha.y == civil.y:
+                print("Tipo de Misión: Rescate")
+                print("Coordenadas civil rescatada: ", civil.x, civil.y)
+                
+                return True
+            else:
+                return False
+        except:
             return False
-
     def llegar_izquierda(self,usuario,civil):
-        if usuario.izquierda.x ==  civil.x and usuario.izquierda.y == civil.y:
-            return True
-        else:
+        try:
+            if usuario.izquierda.x ==  civil.x and usuario.izquierda.y == civil.y:
+                print("Tipo de Misión: Rescate")
+                print("Coordenadas civil rescatada: ", civil.x, civil.y)
+                return True
+            else:
+                return False
+        except:
             return False
-
     def llegar_abajo(self,usuario,civil):
-        if usuario.abajo.x ==  civil.x and usuario.abajo.y == civil.y:
-            return True
-        else:
+        try:
+            if usuario.abajo.x ==  civil.x and usuario.abajo.y == civil.y:
+                print("Tipo de Misión: Rescate")
+                print("Coordenadas civil rescatada: ", civil.x, civil.y)
+                return True
+            else:
+                return False
+        except:
             return False
-
     def llegar_arriba(self,usuario,civil):
-        if usuario.arriba.x ==  civil.x and usuario.arriba.y == civil.y:
-            return True
-        else:
+        try:
+            if usuario.arriba.x ==  civil.x and usuario.arriba.y == civil.y:
+                print("Tipo de Misión: Rescate")
+                print("Coordenadas civil rescatada: ", civil.x, civil.y)
+                return True
+            else:
+                return False
+        except:
             return False
 
     def abajo_derecha(self,usuario,civil):
+        global fila_final, columna_final
         try:
             if self.llegar_derecha(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
 
             elif self.llegar_abajo(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
 
-            elif self.llegar_derecha(usuario,civil) == True:
+            elif self.llegar_arriba(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)  
+                self.imprimir_total(fila_final, columna_final)
+
+            elif self.llegar_izquierda(usuario,civil) == True:
+                print("Mision completada")
+                self.imprimir_total(fila_final, columna_final) 
 
             else:
                 if self.derecha(usuario) == True:
@@ -397,37 +423,42 @@ class Nuevo_rescate:
                 elif self.abajo(usuario) == True:
                     usuario.abajo.color = "amarrillo"
                     self.abajo_derecha(usuario.abajo, civil)
-
-                elif self.arriba(usuario) == True:
-                    usuario.arriba.color = "amarrillo"
-                    self.abajo_derecha(usuario.arriba, civil)
-
+                
                 elif self.izquierda(usuario) == True:
                     usuario.color = "bl"
                     self.abajo_derecha(usuario.izquierda, civil)
 
+                elif self.arriba(usuario) == True:
+                    usuario.color = "bl"
+                    self.abajo_derecha(usuario.arriba, civil)
+
                 else:
                     print("Coordenada", usuario.x, usuario.y)
-                    self.imprimir_total(15,20)
+                    self.imprimir_total(fila_final, columna_final)
                     print("No se puede rescatar")
         except:
             print("Coordenada", usuario.x, usuario.y)
-            self.imprimir_total(15,20)
+            self.imprimir_total(fila_final, columna_final)
             print("No se puede rescatar")
 
     def abajo_izquierda(self,usuario,civil):
+        global fila_final, columna_final
         try:
-            if self.llegar_izquierda(usuario,civil) == True:
+            if self.llegar_derecha(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
-            
+                self.imprimir_total(fila_final, columna_final)
+
             elif self.llegar_abajo(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
 
-            elif self.llegar_derecha(usuario,civil) == True:
-                    print("Mision completada")
-                    self.imprimir_total(15,20)                
+            elif self.llegar_arriba(usuario,civil) == True:
+                print("Mision completada")
+                self.imprimir_total(fila_final, columna_final)
+
+            elif self.llegar_izquierda(usuario,civil) == True:
+                print("Mision completada")
+                self.imprimir_total(fila_final, columna_final)               
 
             else:
                 if self.izquierda(usuario) == True:
@@ -437,37 +468,42 @@ class Nuevo_rescate:
                 elif self.abajo(usuario) == True:
                     usuario.abajo.color = "amarrillo"
                     self.abajo_izquierda(usuario.abajo, civil)
-
-                elif self.arriba(usuario) == True:
-                    usuario.arriba.color = "amarrillo"
-                    self.abajo_izquierda(usuario.arriba, civil)
-
+                
                 elif self.derecha(usuario) == True:
                     usuario.color = "bl"
                     self.abajo_izquierda(usuario.derecha, civil)
 
+                elif self.arriba(usuario) == True:
+                    usuario.color = "bl"
+                    self.abajo_izquierda(usuario.arriba, civil)
+
                 else:
                     print("Coordenada", usuario.x, usuario.y)
-                    self.imprimir_total(15,20)
+                    self.imprimir_total(fila_final, columna_final)
                     print("No se puede rescatar")
         except:
             print("Coordenada", usuario.x, usuario.y)
-            self.imprimir_total(15,20)
+            self.imprimir_total(fila_final, columna_final)
             print("No se puede rescatar")
 
     def arriba_izquierda(self,usuario,civil):
+        global fila_final, columna_final
         try:
-            if self.llegar_izquierda(usuario,civil) == True:
+            if self.llegar_derecha(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
+
+            elif self.llegar_abajo(usuario,civil) == True:
+                print("Mision completada")
+                self.imprimir_total(fila_final, columna_final)
 
             elif self.llegar_arriba(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
-            
-            elif self.llegar_derecha(usuario,civil) == True:
+                self.imprimir_total(fila_final, columna_final)
+
+            elif self.llegar_izquierda(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
             else:
                 if self.izquierda(usuario) == True:
                     usuario.izquierda.color = "amarrillo"
@@ -480,53 +516,64 @@ class Nuevo_rescate:
                 elif self.derecha(usuario) == True:
                     usuario.color = "bl"
                     self.arriba_izquierda(usuario.derecha, civil)
+                
+                elif self.abajo(usuario) == True:
+                    usuario.color = "bl"
+                    self.arriba_izquierda(usuario.abajo, civil)
 
                 else:
                     print("Coordenada", usuario.x, usuario.y)
-                    self.imprimir_total(15,20)
+                    self.imprimir_total(fila_final, columna_final)
                     print("No se puede rescatar")
         except:
             print("Coordenada", usuario.x, usuario.y)
-            self.imprimir_total(15,20)
+            self.imprimir_total(fila_final, columna_final)
             print("No se puede rescatar")
 
     def arriba_derecha(self,usuario,civil):
+        global fila_final, columna_final
         try:
             if self.llegar_derecha(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
 
             elif self.llegar_abajo(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
 
             elif self.llegar_arriba(usuario,civil) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
+
+            elif self.llegar_izquierda(usuario,civil) == True:
+                print("Mision completada")
+                self.imprimir_total(fila_final, columna_final)
+
 
             else:
                 if self.arriba(usuario) == True:
                     usuario.arriba.color = "amarrillo"
                     self.arriba_derecha(usuario.arriba, civil)
+
                 elif self.derecha(usuario) == True:
                     usuario.derecha.color = "amarrillo"
                     self.arriba_derecha(usuario.derecha, civil)
+                
+                elif self.abajo(usuario) == True:
+                    usuario.color = "bl"
+                    self.arriba_derecha(usuario.abajo, civil)
 
                 elif self.izquierda(usuario) == True:
                     usuario.color = "bl"
                     self.arriba_derecha(usuario.izquierda, civil)
 
-                elif self.abajo(usuario) == True:
-                    usuario.color = "bl"
-                    self.arriba_derecha(usuario.izquierda, civil)
-
                 else:
                     print("Coordenada", usuario.x, usuario.y)
-                    self.imprimir_total(15,20)
+                    self.imprimir_total(fila_final, columna_final)
                     print("No se puede rescatar")
         except:
             print("Coordenada", usuario.x, usuario.y)
-            self.imprimir_total(15,20)
+            self.imprimir_total(fila_final, columna_final)
             print("No se puede rescatar")
 
 
@@ -538,7 +585,7 @@ class Nuevo_rescate:
 # texto = "********************""*** **             *""*** *****E*****C****""*** ***** ***** ***R""E             A   AA""*** ** ** ** ** ****""*** ** ** ** ** **R*""*              A   *""*** ** ** ** ** ****""*** ** ** ** ** ****""***   A      A     *""*** ** ** ** ** ****""*** **  E ** *R ****""*** *****A        C*""*** *****C***** ****"
 
 # self.llenar_colores(texto,15,20)
-# #self.imprimir_total(15,20)
+# #self.imprimir_total(fila_final, columna_final)
 
 # self.realizar_mision(14,10,5,1)
 

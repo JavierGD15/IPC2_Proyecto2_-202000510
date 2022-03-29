@@ -15,13 +15,21 @@ from Rescate import Nuevo_rescate
 from extraccion import Nueva_extraccion
 from imprimir_mapa import mapas
 
+veces = 0
 
-
-def abrir_archivo():    
-    direcion = filedialog.askopenfilename(initialdir ='/',
-										title='Escoger Tu archivo de entrada',
-										filetype=(('xml files', '*.xml*'),('All files', '*.*')))
-    return direcion
+def abrir_archivo():  
+    global veces
+    if veces == 0:
+        
+        direcion = filedialog.askopenfilename(initialdir ='/',
+                                            title='Escoger Tu archivo de entrada',
+                                            filetype=(('xml files', '*.xml*'),('All files', '*.*')))
+        
+        veces = 1
+        return direcion
+    else:
+        direcion = input("Ingrese la direccion del archivo: ")
+        return direcion
 
 
 def leerArchivo(direcion):
@@ -152,7 +160,7 @@ def mision_rescate():
     op = nuevodron.verificar()
     if op == True:
         print("Los drones disponibles son: ")
-        nuevodron.imprimir(False)
+        nuevodron.imprimir("ChapinRescue")
         opcion = input("Ingrese el nombre del drone que desea utilizar: ")
         aux = nuevodron.buscar(opcion)
         if aux != False:
@@ -174,11 +182,11 @@ def mision_rescate():
                         coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
                         coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
                         mat = matriz.buscar_coordenadas(1,1)
-                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat) 
+                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat,int(aux56.fila),int(aux56.columna)) 
                     else:
                         mat = matriz.buscar_coordenadas(1,1)
                         coordenadamatriz = matriz.buscar_color_coordenada(int(aux56.fila),int(aux56.columna),"verde")
-                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadamatriz.x),int(coordenadamatriz.y) , mat)
+                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadamatriz.x),int(coordenadamatriz.y) , mat,int(aux56.fila),int(aux56.columna))
                 
                 else:
                     mat = matriz.buscar_coordenadas(1,1)
@@ -186,10 +194,10 @@ def mision_rescate():
                     if len(entradas) > 1:
                         coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
                         coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
-                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadaX),int(coordenadaY), mat)
+                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadaX),int(coordenadaY), mat,int(aux56.fila),int(aux56.columna))
                     else:
                         coordenadamatriz = matriz.buscar_color_coordenada(aux56.fila,aux56.columna,"verde")
-                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadamatriz.x),int(coordenadamatriz.y), mat)
+                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadamatriz.x),int(coordenadamatriz.y), mat,int(aux56.fila),int(aux56.columna))
                         
                     
                     
@@ -205,6 +213,8 @@ def mision_rescate():
     else:
         print("No existen drones disponibles")
         menu()
+    print("Robot utilizado: "+opcion)
+    print("Capacidad inicial: "+str(aux.capacidad))
     menu()
 
 def mision_extraccion():
@@ -216,16 +226,16 @@ def mision_extraccion():
     op = nuevodron.verificar_tipo()
     if op == True:
         print("Los drones disponibles son: ")
-        nuevodron.imprimir(True)
-        opcion = input("Ingrese el nombre del drone que desea utilizar: ")
-        aux = nuevodron.buscar(opcion)
+        nuevodron.imprimir("ChapinFighter")
+        opcion1 = input("Ingrese el nombre del drone que desea utilizar: ")
+        aux = nuevodron.buscar(opcion1)
         if aux != False:
             print("Las ciudades disponibles son: ")
             nuevalista.imprimir()
             opcion = input("Ingrese el nombre de la ciudad que desea Recoger recursos: ")
             aux56 = nuevalista.mostrar(opcion)
-            print(aux56.fila, aux56.columna)
             llenado_lista(opcion)
+            ayuda = Nuevo_guerrero.devolver()
             print("La ciudad seleccionada es la siguiente: ")
             entradas =matriz.buscar_color(int(aux56.fila),int(aux56.columna),"gris")
             if entradas > 0:
@@ -239,11 +249,12 @@ def mision_extraccion():
                         coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
                         coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
                         mat = matriz.buscar_coordenadas(1,1)
-                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat, int(aux.capacidad)) 
+                        
+                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat, int(aux.capacidad),int(aux56.fila),int(aux56.columna),opcion,ayuda) 
                     else:
                         mat = matriz.buscar_coordenadas(1,1)
                         coordenadamatriz = matriz.buscar_color_coordenada(int(aux56.fila),int(aux56.columna),"verde")
-                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadamatriz.x),int(coordenadamatriz.y) , mat, int(aux.capacidad))
+                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadamatriz.x),int(coordenadamatriz.y) , mat, int(aux.capacidad),int(aux56.fila),int(aux56.columna),opcion,ayuda)
                 
                 else:
                     mat = matriz.buscar_coordenadas(1,1)
@@ -251,10 +262,10 @@ def mision_extraccion():
                     if len(entradas) > 1:
                         coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
                         coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
-                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadaX),int(coordenadaY), mat, int(aux.capacidad))
+                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadaX),int(coordenadaY), mat, int(aux.capacidad),int(aux56.fila),int(aux56.columna),opcion,ayuda)
                     else:
                         coordenadamatriz = matriz.buscar_color_coordenada(aux56.fila,aux56.columna,"verde")
-                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadamatriz.x),int(coordenadamatriz.y), mat, int(aux.capacidad))
+                        rescate.realizar_mision(int(civilesX1),int(civilesX1),int(coordenadamatriz.x),int(coordenadamatriz.y), mat, int(aux.capacidad),int(aux56.fila),int(aux56.columna),opcion,ayuda)
                         
                     
                     
@@ -270,6 +281,9 @@ def mision_extraccion():
     else:
         print("No existen drones disponibles")
         menu()
+    print("Robot utilizado: "+opcion1)
+    print("Capacidad inicial: "+str(aux.capacidad))
+    
     menu()
     
 def llenado_lista(opcion):

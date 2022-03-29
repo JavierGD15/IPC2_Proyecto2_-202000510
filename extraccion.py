@@ -1,8 +1,7 @@
 from graphviz import Digraph, Graph
-import collections
-import re
 from turtle import pen
 from guerreros import Nodo_guerra, Nuevo_Nodo_guerra
+guerra = Nuevo_Nodo_guerra()
 
 class Matriz_nodo:
     def __init__(self, x = None, y = None, izquierda = None, derecha = None, arriba = None, abajo = None, color = None, capacidad = None):
@@ -58,7 +57,7 @@ class Nueva_extraccion:
             print("No hay nodos")
 
     def llenar_matriz(self,filas, columnas):
-        Nuevo_mapa()
+        
         for i in range(1,filas+1):
             for j in range(1,columnas+1):
                 self.insertar(Matriz_nodo(i,j))
@@ -298,9 +297,26 @@ class Nueva_extraccion:
                 
                 if aux.color == color:                    
                     return aux
-                    
-    def realizar_mision(self,filarecurso,columnarecurso, filaentrada, columnarentrada,matriz,capacidad1): 
-        global capacidad
+    def pelea(self,filas,columnas):
+        global ciudad, guerreros
+        ayuda = guerreros
+        
+        while ayuda != None:
+            
+            if ayuda.nombre == ciudad and int(ayuda.fila) == int(filas) and int(ayuda.columna) == int(columnas):
+                
+                return ayuda.valor
+            else:
+                ayuda = ayuda.siguiente
+        
+
+
+    def realizar_mision(self,filarecurso,columnarecurso, filaentrada, columnarentrada,matriz,capacidad1,filas,columnas,opcion,ayuda): 
+        global capacidad, fila_final, columna_final, ciudad,guerreros
+        guerreros = ayuda
+        ciudad = opcion
+        fila_final = filas
+        columna_final = columnas
         capacidad = capacidad1
         self.raiz = matriz   
         recurso = self.buscar_coordenadas(filarecurso,columnarecurso)        
@@ -340,15 +356,16 @@ class Nueva_extraccion:
         
     def derecha(self,usuario):
         global capacidad        
-        if usuario.derecha.color == "blanco" or usuario.derecha.color == "amarrillo" or usuario.derecha.color == "verde" or usuario.abajo.color == "azul":
+        if usuario.derecha.color == "blanco" or usuario.derecha.color == "amarrillo" or usuario.derecha.color == "verde" or usuario.derecha.color == "azul" or usuario.derecha.color == "gris":
             return True
         
         elif usuario.derecha.color == "rojo":
-            if capacidad >= int(guerra.buscar(usuario.derecha.x,usuario.derecha.y)):
-                capacidad = capacidad - int(guerra.buscar(usuario.derecha.x,usuario.derecha.y))
-                
+            if capacidad >= int(self.pelea(usuario.derecha.x,usuario.derecha.y)):
+                capacidad = capacidad - int(self.pelea(usuario.derecha.x,usuario.derecha.y))    
+
                 return True
             else:
+                print("No hay suficiente capacidad")
                 return False           
         
         else:
@@ -356,12 +373,12 @@ class Nueva_extraccion:
 
     def izquierda(self,usuario):
         global capacidad
-        if usuario.izquierda.color == "blanco" or usuario.izquierda.color == "amarrillo" or usuario.izquierda.color == "verde" or usuario.abajo.color == "azul":
+        if usuario.izquierda.color == "blanco" or usuario.izquierda.color == "amarrillo" or usuario.izquierda.color == "verde" or usuario.izquierda.color == "azul" or usuario.izquierda.color == "gris":
             return True
 
         elif usuario.izquierda.color == "rojo":
-            if capacidad >= int(guerra.buscar(usuario.izquierda.x,usuario.izquierda.y)):
-                capacidad = capacidad - int(guerra.buscar(usuario.izquierda.x,usuario.izquierda.y))
+            if capacidad >= int(self.pelea(usuario.izquierda.x,usuario.izquierda.y)):
+                capacidad = capacidad - int(self.pelea(usuario.izquierda.x,usuario.izquierda.y))
                 return True
             else:
                 return False 
@@ -372,12 +389,12 @@ class Nueva_extraccion:
     
     def abajo(self,usuario):
         global capacidad
-        if usuario.abajo.color == "blanco" or usuario.abajo.color == "amarrillo" or usuario.abajo.color == "verde" or usuario.abajo.color == "azul":
+        if usuario.abajo.color == "blanco" or usuario.abajo.color == "amarrillo" or usuario.abajo.color == "verde" or usuario.abajo.color == "azul" or usuario.abajo.color == "gris":
             return True
 
         elif usuario.abajo.color == "rojo":
-            if capacidad >= int(guerra.buscar(usuario.abajo.x,usuario.abajo.y)):
-                capacidad = capacidad - int(guerra.buscar(usuario.abajo.x,usuario.abajo.y))
+            if capacidad >= int(self.pelea(usuario.abajo.x,usuario.abajo.y)):
+                capacidad = capacidad - int(self.pelea(usuario.abajo.x,usuario.abajo.y))
                 
                 return True
             else:
@@ -388,12 +405,12 @@ class Nueva_extraccion:
         
     def arriba(self,usuario):
         global capacidad
-        if usuario.arriba.color == "blanco" or usuario.arriba.color == "amarrillo" or usuario.arriba.color == "verde" or usuario.arriba.color == "azul":
+        if usuario.arriba.color == "blanco" or usuario.arriba.color == "amarrillo" or usuario.arriba.color == "verde" or usuario.arriba.color == "azul" or usuario.arriba.color == "gris":
             return True
         
         elif usuario.arriba.color == "rojo":
-            if capacidad >= int(guerra.buscar(usuario.arriba.x,usuario.arriba.y)):
-                capacidad = capacidad - int(guerra.buscar(usuario.arriba.x,usuario.arriba.y))
+            if capacidad >= int(self.pelea(usuario.arriba.x,usuario.arriba.y)):
+                capacidad = capacidad - int(self.pelea(usuario.arriba.x,usuario.arriba.y))
                 return True
             else:
                 return False 
@@ -404,6 +421,9 @@ class Nueva_extraccion:
     def llegar_derecha(self,usuario,recurso):
         try:
             if usuario.derecha.x == recurso.x and usuario.derecha.y == recurso.y:
+                print("Tipo de Misión: Extraccion")
+                print("Coordenadas extracción: ", recurso.x, recurso.y)
+                print("Capacidad final: ", capacidad)
                 return True
             else:
                 return False
@@ -412,6 +432,9 @@ class Nueva_extraccion:
     def llegar_izquierda(self,usuario,recurso):
         try:
             if usuario.izquierda.x ==  recurso.x and usuario.izquierda.y == recurso.y:
+                print("Tipo de Misión: Extraccion")
+                print("Coordenadas extracción: ", recurso.x, recurso.y)
+                print("Capacidad final: ", capacidad)
                 return True
             else:
                 return False
@@ -420,6 +443,9 @@ class Nueva_extraccion:
     def llegar_abajo(self,usuario,recurso):
         try:
             if usuario.abajo.x ==  recurso.x and usuario.abajo.y == recurso.y:
+                print("Tipo de Misión: Extraccion")
+                print("Coordenadas extracción: ", recurso.x, recurso.y)
+                print("Capacidad final: ", capacidad)
                 return True
             else:
                 return False
@@ -428,6 +454,9 @@ class Nueva_extraccion:
     def llegar_arriba(self,usuario,recurso):
         try:
             if usuario.arriba.x ==  recurso.x and usuario.arriba.y == recurso.y:
+                print("Tipo de Misión: Extraccion")
+                print("Coordenadas extracción: ", recurso.x, recurso.y)
+                print("Capacidad final: ", capacidad)
                 return True
             else:
                 return False
@@ -435,23 +464,24 @@ class Nueva_extraccion:
             return False
 
     def abajo_derecha(self,usuario,recurso):
+        global fila_final, columna_final
         try:
             
             if self.llegar_derecha(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
 
             elif self.llegar_abajo(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
             
             elif self.llegar_arriba(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)  
+                self.imprimir_total(fila_final, columna_final)  
 
             elif self.llegar_izquierda(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20) 
+                self.imprimir_total(fila_final, columna_final) 
 
             else:
                 if self.derecha(usuario) == True:
@@ -461,38 +491,45 @@ class Nueva_extraccion:
                 elif self.abajo(usuario) == True:
                     usuario.abajo.color = "amarrillo"
                     self.abajo_derecha(usuario.abajo, recurso)
+                
+                elif self.izquierda(usuario) == True:
+                    usuario.color = "bl"
+                    self.abajo_derecha(usuario.izquierda, recurso)
 
                 elif self.arriba(usuario) == True:
                     usuario.arriba.color = "amarrillo"
                     self.abajo_derecha(usuario.arriba, recurso)
 
-                elif self.izquierda(usuario) == True:
-                    usuario.color = "bl"
-                    self.abajo_derecha(usuario.izquierda, recurso)
+                
 
                 else:
                     print("Coordenada", usuario.x, usuario.y)
-                    self.imprimir_total(15,20)
+                    
                     print("No se puede rescatar")
         except Exception as e:
             print(e)
             print("Coordenada", usuario.x, usuario.y)
-            self.imprimir_total(15,20)
+           
             print("No se puede rescatar")
 
     def abajo_izquierda(self,usuario,recurso):
+        global fila_final, columna_final
         try:
-            if self.llegar_izquierda(usuario,recurso) == True:
+            if self.llegar_derecha(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
-            
+                self.imprimir_total(fila_final, columna_final)
+
             elif self.llegar_abajo(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
+            
+            elif self.llegar_arriba(usuario,recurso) == True:
+                print("Mision completada")
+                self.imprimir_total(fila_final, columna_final)  
 
-            elif self.llegar_derecha(usuario,recurso) == True:
-                    print("Mision completada")
-                    self.imprimir_total(15,20)                
+            elif self.llegar_izquierda(usuario,recurso) == True:
+                print("Mision completada")
+                self.imprimir_total(fila_final, columna_final)                
 
             else:
                 if self.izquierda(usuario) == True:
@@ -502,37 +539,44 @@ class Nueva_extraccion:
                 elif self.abajo(usuario) == True:
                     usuario.abajo.color = "amarrillo"
                     self.abajo_izquierda(usuario.abajo, recurso)
+                
+                elif self.derecha(usuario) == True:
+                    usuario.color = "bl"
+                    self.abajo_izquierda(usuario.derecha, recurso)
 
                 elif self.arriba(usuario) == True:
                     usuario.arriba.color = "amarrillo"
                     self.abajo_izquierda(usuario.arriba, recurso)
 
-                elif self.derecha(usuario) == True:
-                    usuario.color = "bl"
-                    self.abajo_izquierda(usuario.derecha, recurso)
+                
 
                 else:
                     print("Coordenada", usuario.x, usuario.y)
-                    self.imprimir_total(15,20)
+                    
                     print("No se puede rescatar")
         except:
             print("Coordenada", usuario.x, usuario.y)
-            self.imprimir_total(15,20)
+            
             print("No se puede rescatar")
 
     def arriba_izquierda(self,usuario,recurso):
+        global fila_final, columna_final
         try:
-            if self.llegar_izquierda(usuario,recurso) == True:
+            if self.llegar_derecha(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
 
+            elif self.llegar_abajo(usuario,recurso) == True:
+                print("Mision completada")
+                self.imprimir_total(fila_final, columna_final)
+            
             elif self.llegar_arriba(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
-            
-            elif self.llegar_derecha(usuario,recurso) == True:
+                self.imprimir_total(fila_final, columna_final)  
+
+            elif self.llegar_izquierda(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final) 
             else:
                 if self.izquierda(usuario) == True:
                     usuario.izquierda.color = "amarrillo"
@@ -546,58 +590,67 @@ class Nueva_extraccion:
                     usuario.color = "bl"
                     self.arriba_izquierda(usuario.derecha, recurso)
 
+                elif self.abajo(usuario) == True:
+                    usuario.color = "bl"
+                    self.arriba_izquierda(usuario.abajo, recurso)
+
                 else:
                     print("Coordenada", usuario.x, usuario.y)
-                    self.imprimir_total(15,20)
+                    
                     print("No se puede rescatar")
         except:
             print("Coordenada", usuario.x, usuario.y)
-            self.imprimir_total(15,20)
             print("No se puede rescatar")
 
     def arriba_derecha(self,usuario,recurso):
+        global fila_final, columna_final
         try:
             if self.llegar_derecha(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)
 
             elif self.llegar_abajo(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
-
+                self.imprimir_total(fila_final, columna_final)
+            
             elif self.llegar_arriba(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(15,20)
+                self.imprimir_total(fila_final, columna_final)  
+
+            elif self.llegar_izquierda(usuario,recurso) == True:
+                print("Mision completada")
+                self.imprimir_total(fila_final, columna_final) 
 
             else:
                 if self.arriba(usuario) == True:
                     usuario.arriba.color = "amarrillo"
                     self.arriba_derecha(usuario.arriba, recurso)
                 elif self.derecha(usuario) == True:
-
                     usuario.derecha.color = "amarrillo"
                     self.arriba_derecha(usuario.derecha, recurso)
+                
+                elif self.abajo(usuario) == True:
+                    usuario.color = "bl"
+                    self.arriba_derecha(usuario.abajo, recurso)
 
                 elif self.izquierda(usuario) == True:
                     usuario.color = "bl"
                     self.arriba_derecha(usuario.izquierda, recurso)
 
-                elif self.abajo(usuario) == True:
-                    usuario.color = "bl"
-                    self.arriba_derecha(usuario.izquierda, recurso)
+                
 
                 else:
-                    print("Coordenada", usuario.x, usuario.y)
-                    self.imprimir_total(15,20)
+                    print("Coordenadaaaaaaaaaaa", usuario.x, usuario.y)                    
                     print("No se puede rescatar")
-        except:
-            print("Coordenada", usuario.x, usuario.y)
-            self.imprimir_total(15,20)
+        except Exception as e:
+            print(e)
+            print("Coordenada error", usuario.x, usuario.y)
+           
             print("No se puede rescatar")
 
 
 
-guerra = Nuevo_Nodo_guerra()
+#guerra = Nuevo_Nodo_guerra()
 
 # t1 = Nodo_guerra("Ratchet",5,15,1)
 # t2 = Nodo_guerra("Ratchet",8,16,1)
@@ -624,6 +677,6 @@ guerra = Nuevo_Nodo_guerra()
 # texto = "********************""*** **             *""*** *****E*****C****""*** ***** ***** ***R""E             A   AA""*** ** ** ** ** ****""*** ** ** ** ** **R*""*              A   *""*** ** ** ** ** ****""*** ** ** ** ** ****""***   A      A     *""*** ** ** ** ** ****""*** **  E ** *R ****""*** *****A        C*""*** *****C***** ****"
 
 # self.llenar_colores(texto,15,20)
-# #self.imprimir_total(15,20)
+# #self.imprimir_total(fila_final, columna_final)
 
 # self.realizar_mision(5,1,14,16, 10)

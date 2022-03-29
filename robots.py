@@ -26,17 +26,20 @@ class Nuevo_nodo_dron:
         aux = self.raiz
 
         while aux != None:
-            if variable == True:
-                if aux.capacidad != None:
-                    print("Nombre:",aux.nombre," Tipo:",aux.tipo," Capacidad:",aux.capacidad)                
-
+            if variable != "ChapinRescue":
+                if aux.tipo != "ChapinRescue":
+                    print("Nombre:",aux.nombre," Tipo:",aux.tipo," Capacidad:",aux.capacidad)              
                     aux = aux.siguiente
+                else:
+                    aux = aux.siguiente
+
             else:
-                if aux.capacidad == None:
+                if aux.tipo == "ChapinRescue":
                     print("Nombre:",aux.nombre," Tipo:",aux.tipo)  
                     aux = aux.siguiente
 
-    
+                else:
+                    aux = aux.siguiente
 
 
     def buscar(self, nombre):
@@ -59,7 +62,7 @@ class Nuevo_nodo_dron:
     def verificar(self):
         aux = self.raiz
         while aux != None:
-            if aux.capacidad == None and aux.nombre != None:
+            if aux.tipo== "ChapinRescue":
                 return True
             aux = aux.siguiente
         return False
@@ -67,7 +70,7 @@ class Nuevo_nodo_dron:
     def verificar_tipo(self):
         aux = self.raiz
         while aux != None:
-            if aux.capacidad != None:
+            if aux.tipo == "ChapinFighter":
                 return True
             aux = aux.siguiente
         return False
