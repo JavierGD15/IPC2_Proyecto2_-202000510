@@ -43,12 +43,15 @@ class Nuevo_nodo_dron:
 
 
     def buscar(self, nombre):
-        aux = self.raiz
-        while aux != None:
-            if aux.nombre == nombre:
-                return aux
-            aux = aux.siguiente
-        return False
+        try:
+            aux = self.raiz
+            while aux != None:
+                if aux.nombre == nombre:
+                    return aux
+                aux = aux.siguiente
+            return False
+        except:
+            return False
 
     def editar(self, nombre, tipo, capacidad):
         aux = self.raiz
@@ -60,17 +63,23 @@ class Nuevo_nodo_dron:
             aux = aux.siguiente
         return False
     def verificar(self):
-        aux = self.raiz
-        while aux != None:
-            if aux.tipo== "ChapinRescue":
-                return True
-            aux = aux.siguiente
-        return False
+        try:
+            aux = self.raiz
+            while aux != None:
+                if aux.tipo== "ChapinRescue":
+                    return True
+                aux = aux.siguiente
+            return False
+        except:
+            return False
 
     def verificar_tipo(self):
-        aux = self.raiz
-        while aux != None:
-            if aux.tipo == "ChapinFighter":
-                return True
-            aux = aux.siguiente
-        return False
+        try:
+            aux = self.raiz
+            while aux != None:
+                if aux.tipo == "ChapinFighter":
+                    return True
+                aux = aux.siguiente
+            return False
+        except:
+            return False

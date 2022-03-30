@@ -136,9 +136,13 @@ def menu():
             menu()
     elif opcion == "2":
         print("Las ciudades disponibles son: ")
-        nuevalista.imprimir()
-        opcion = input("Ingrese el nombre de la ciudad que desea visualizar: ")
-        llenado_lista(opcion)
+        try:
+            nuevalista.imprimir()
+            opcion = input("Ingrese el nombre de la ciudad que desea visualizar: ")
+            llenado_lista(opcion)
+        except:
+            print("No hay ciudades disponibles, por favor carga ciudades")
+            menu()
                     
 
         menu()
@@ -157,7 +161,10 @@ def mision_rescate():
     rescate = Nuevo_rescate()
     print("***************************************************")
     print("*"+"           Verificando existencia de ChapinRescue..."+ "                *")
-    op = nuevodron.verificar()
+    try:
+        op = nuevodron.verificar()
+    except:
+        op = False
     if op == True:
         print("Los drones disponibles son: ")
         nuevodron.imprimir("ChapinRescue")
@@ -223,7 +230,10 @@ def mision_extraccion():
     rescate = Nueva_extraccion()
     print("***************************************************")
     print("*"+"           Verificando existencia de ChapinFighter..."+ "                *")
-    op = nuevodron.verificar_tipo()
+    try:
+        op = nuevodron.verificar_tipo()
+    except:
+        op = False
     if op == True:
         print("Los drones disponibles son: ")
         nuevodron.imprimir("ChapinFighter")
