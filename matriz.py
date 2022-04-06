@@ -99,6 +99,15 @@ class Nuevo_mapa:
                 
 
     #funciones de tablero
+    def buscar_color_verde(self,filas,columnas,color):
+        z = []
+        for i in range(1,filas+1):
+            for j in range(1,columnas+1):                
+                aux = self.buscar_coordenadas(i,j)                
+                if aux.color == color:
+                    z.append([i,j])
+                    
+        return z
 
     def buscar_coordenadas(self,x2,y2):
         aux = self.raiz

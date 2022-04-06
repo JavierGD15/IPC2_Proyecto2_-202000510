@@ -288,6 +288,7 @@ class Nueva_extraccion:
                     
         return z
 
+
     def buscar_color_coordenada(self,filas,columnas,color):
         
         for i in range(1,filas+1):
@@ -328,31 +329,55 @@ class Nueva_extraccion:
         if usuario.x > recurso.x :
             if usuario.y > recurso.y :
                 print("Esta hacia arriba y la izquierda")
-                self.arriba_izquierda(usuario,recurso)
+                decision =self.arriba_izquierda(usuario,recurso)
+                if decision == True:
+                    return True
+                else:
+                    return False
             elif usuario.y == recurso.y :
                 print("Esta hacia arriba en la misma columna")
             else:
                 print("Esta hacia arriba y la derecha")
-                self.arriba_derecha(usuario,recurso)
+                decision =self.arriba_derecha(usuario,recurso)
+                if decision == True:
+                    return True
+                else:
+                    return False
 
 
         elif usuario.x == recurso.x :
             if usuario.y > recurso.y :
                 print("Esta hacia la izquierda en la misma fila")
-                self.abajo_izquierda(usuario,recurso)
+                decision =self.abajo_izquierda(usuario,recurso)
+                if decision == True:
+                    return True
+                else:
+                    return False
             elif usuario.y == recurso.y :
                 print("Esta en el mismo lugar")
             else:
                 print("Esta hacia la derecha en la misma fila")
-                self.abajo_derecha(usuario,recurso)
+                decision =self.abajo_derecha(usuario,recurso)
+                if decision == True:
+                    return True
+                else:
+                    return False
 
         else:
             if usuario.y > recurso.y :
                 print("Esta hacia abajo y la izquierda")
-                self.abajo_izquierda(usuario,recurso)
+                decision =self.abajo_izquierda(usuario,recurso)
+                if decision == True:
+                    return True
+                else:
+                    return False
             else:
                 print("Esta hacia abajo y la derecha")
-                self.abajo_derecha(usuario,recurso)
+                decision =self.abajo_derecha(usuario,recurso)
+                if decision == True:
+                    return True
+                else:
+                    return False
         
     def derecha(self,usuario):
         global capacidad        
@@ -470,18 +495,22 @@ class Nueva_extraccion:
             if self.llegar_derecha(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)
+                return True
 
             elif self.llegar_abajo(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)
+                return True
             
             elif self.llegar_arriba(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(fila_final, columna_final)  
+                self.imprimir_total(fila_final, columna_final) 
+                return True 
 
             elif self.llegar_izquierda(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final) 
+                return True
 
             else:
                 if self.derecha(usuario) == True:
@@ -506,11 +535,13 @@ class Nueva_extraccion:
                     print("Coordenada", usuario.x, usuario.y)
                     
                     print("No se puede rescatar")
+                    return False
         except Exception as e:
             print(e)
             print("Coordenada", usuario.x, usuario.y)
            
             print("No se puede rescatar")
+            return False
 
     def abajo_izquierda(self,usuario,recurso):
         global fila_final, columna_final
@@ -518,18 +549,22 @@ class Nueva_extraccion:
             if self.llegar_derecha(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)
+                return True
 
             elif self.llegar_abajo(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)
+                return True
             
             elif self.llegar_arriba(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(fila_final, columna_final)  
+                self.imprimir_total(fila_final, columna_final) 
+                return True 
 
             elif self.llegar_izquierda(usuario,recurso) == True:
                 print("Mision completada")
-                self.imprimir_total(fila_final, columna_final)                
+                self.imprimir_total(fila_final, columna_final)   
+                return True             
 
             else:
                 if self.izquierda(usuario) == True:
@@ -554,10 +589,12 @@ class Nueva_extraccion:
                     print("Coordenada", usuario.x, usuario.y)
                     
                     print("No se puede rescatar")
+                    return False
         except:
             print("Coordenada", usuario.x, usuario.y)
             
             print("No se puede rescatar")
+            return False
 
     def arriba_izquierda(self,usuario,recurso):
         global fila_final, columna_final
@@ -565,18 +602,22 @@ class Nueva_extraccion:
             if self.llegar_derecha(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)
+                return True
 
             elif self.llegar_abajo(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)
+                return True
             
             elif self.llegar_arriba(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)  
+                return True
 
             elif self.llegar_izquierda(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final) 
+                return True
             else:
                 if self.izquierda(usuario) == True:
                     usuario.izquierda.color = "amarrillo"
@@ -598,9 +639,11 @@ class Nueva_extraccion:
                     print("Coordenada", usuario.x, usuario.y)
                     
                     print("No se puede rescatar")
+                    return False
         except:
             print("Coordenada", usuario.x, usuario.y)
             print("No se puede rescatar")
+            return False
 
     def arriba_derecha(self,usuario,recurso):
         global fila_final, columna_final
@@ -608,18 +651,22 @@ class Nueva_extraccion:
             if self.llegar_derecha(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)
+                return True
 
             elif self.llegar_abajo(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)
+                return True
             
             elif self.llegar_arriba(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final)  
+                return True
 
             elif self.llegar_izquierda(usuario,recurso) == True:
                 print("Mision completada")
                 self.imprimir_total(fila_final, columna_final) 
+                return True
 
             else:
                 if self.arriba(usuario) == True:
@@ -642,11 +689,14 @@ class Nueva_extraccion:
                 else:
                     print("Coordenadaaaaaaaaaaa", usuario.x, usuario.y)                    
                     print("No se puede rescatar")
+                    return False
+
         except Exception as e:
             print(e)
             print("Coordenada error", usuario.x, usuario.y)
            
             print("No se puede rescatar")
+            return False
 
 
 

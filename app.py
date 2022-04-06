@@ -186,10 +186,14 @@ def mision_rescate():
                     civilesY = input("Ingrese la coordenada X de la unidad civil a rescatar: ")
                     entradas =matriz.buscar_color(int(aux56.fila),int(aux56.columna),"verde")
                     if entradas > 1:
-                        coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
-                        coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
-                        mat = matriz.buscar_coordenadas(1,1)
-                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat,int(aux56.fila),int(aux56.columna)) 
+                        mate = matriz.buscar_color_verde(int(aux56.fila),int(aux56.columna),"verde")
+                        for i in mate:
+                            coordenadaX = i[0]
+                            coordenadaY = i[1]
+                            mat = matriz.buscar_coordenadas(1,1)
+                            final = rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat,int(aux56.fila),int(aux56.columna)) 
+                            if final == True:
+                                break
                     else:
                         mat = matriz.buscar_coordenadas(1,1)
                         coordenadamatriz = matriz.buscar_color_coordenada(int(aux56.fila),int(aux56.columna),"verde")
@@ -256,11 +260,15 @@ def mision_extraccion():
                     civilesY = input("Ingrese la coordenada X de la unidad de recursos: ")
                     entradas =matriz.buscar_color(int(aux56.fila),int(aux56.columna),"verde")
                     if entradas > 1:
-                        coordenadaX = input("Ingrese la coordenadas en Y de su punto de entrada: ")
-                        coordenadaY = input("Ingrese la coordenadas en X de su punto de entrada: ")
-                        mat = matriz.buscar_coordenadas(1,1)
-                        
-                        rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat, int(aux.capacidad),int(aux56.fila),int(aux56.columna),opcion,ayuda) 
+                        mate = matriz.buscar_color_verde(int(aux56.fila),int(aux56.columna),"verde")
+                        for i in mate:
+                            coordenadaX = i[0]
+                            coordenadaY = i[1]
+                            mat = matriz.buscar_coordenadas(1,1)     
+                                            
+                            final = rescate.realizar_mision(int(civilesX),int(civilesY),int(coordenadaX),int(coordenadaY), mat, int(aux.capacidad),int(aux56.fila),int(aux56.columna),opcion,ayuda) 
+                            if final == True:
+                                break
                     else:
                         mat = matriz.buscar_coordenadas(1,1)
                         coordenadamatriz = matriz.buscar_color_coordenada(int(aux56.fila),int(aux56.columna),"verde")
