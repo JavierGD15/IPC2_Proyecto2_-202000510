@@ -22,21 +22,36 @@ class Nuevo_nodo_dron:
             self.ultimo.siguiente = nuevoNodo
             self.ultimo = nuevoNodo
 
-    def imprimir(self):
+    def imprimir(self, variable):
         aux = self.raiz
 
         while aux != None:
-            print(aux.nombre, aux.tipo, aux.capacidad)
+            if variable != "ChapinRescue":
+                if aux.tipo != "ChapinRescue":
+                    print("Nombre:",aux.nombre," Tipo:",aux.tipo," Capacidad:",aux.capacidad)              
+                    aux = aux.siguiente
+                else:
+                    aux = aux.siguiente
 
-            aux = aux.siguiente
+            else:
+                if aux.tipo == "ChapinRescue":
+                    print("Nombre:",aux.nombre," Tipo:",aux.tipo)  
+                    aux = aux.siguiente
+
+                else:
+                    aux = aux.siguiente
+
 
     def buscar(self, nombre):
-        aux = self.raiz
-        while aux != None:
-            if aux.nombre == nombre:
-                return True
-            aux = aux.siguiente
-        return False
+        try:
+            aux = self.raiz
+            while aux != None:
+                if aux.nombre == nombre:
+                    return aux
+                aux = aux.siguiente
+            return False
+        except:
+            return False
 
     def editar(self, nombre, tipo, capacidad):
         aux = self.raiz
@@ -47,3 +62,24 @@ class Nuevo_nodo_dron:
                 return True
             aux = aux.siguiente
         return False
+    def verificar(self):
+        try:
+            aux = self.raiz
+            while aux != None:
+                if aux.tipo== "ChapinRescue":
+                    return True
+                aux = aux.siguiente
+            return False
+        except:
+            return False
+
+    def verificar_tipo(self):
+        try:
+            aux = self.raiz
+            while aux != None:
+                if aux.tipo == "ChapinFighter":
+                    return True
+                aux = aux.siguiente
+            return False
+        except:
+            return False

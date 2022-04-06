@@ -35,3 +35,11 @@ class Nuevo_Nodo_guerra:
             print(aux.nombre, aux.fila, aux.columna, aux.valor)
             
             aux = aux.siguiente
+
+    def buscar(self, fila, columna):
+        aux = self.raiz
+        while aux != None:
+            if aux.fila == fila and aux.columna == columna:
+                return aux.valor
+            aux = aux.siguiente
+        return False
